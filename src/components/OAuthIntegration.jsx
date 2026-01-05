@@ -2,6 +2,31 @@ import { useState, useEffect } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 
+
+/**
+ * OAuthIntegration
+ *
+ * Generic OAuth connector UI for third-party integrations (e.g. Notion, Airtable).
+ *
+ * Responsibilities:
+ * - Initiates OAuth by requesting an authorization URL from the backend
+ * - Opens the OAuth flow in a popup window
+ * - Polls until the popup is closed
+ * - Fetches credentials from the backend after OAuth completes
+ * - Updates parent-managed integration state via setIntegrationParams
+ *
+ * This component does NOT:
+ * - Store credentials long-term
+ * - Decide what to do with the credentials
+ * - Know anything about downstream data usage
+ *
+ * Props:
+ * @param {string} user - User identifier passed to backend
+ * @param {string} org - Organization identifier passed to backend
+ * @param {string} integrationType - Integration name (e.g. "Notion", "Airtable")
+ * @param {Object} integrationParams - Parent-owned integration state
+ * @param {Function} setIntegrationParams - Setter to update parent integration state
+ */
 export const OAuthIntegration = ({
   user,
   org,
