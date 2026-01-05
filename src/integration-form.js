@@ -1,20 +1,13 @@
 import { useState } from "react";
 import { Box, Autocomplete, TextField } from "@mui/material";
-import { AirtableIntegration } from "./integrations/airtable";
-import { NotionIntegration } from "./integrations/notion";
 import { DataForm } from "./data-form";
-
-const integrationMapping = {
-  Notion: NotionIntegration,
-  Airtable: AirtableIntegration,
-};
+import { OAuthIntegration } from "./components/OAuthIntegration";
 
 export const IntegrationForm = () => {
   const [integrationParams, setIntegrationParams] = useState({});
   const [user, setUser] = useState("TestUser");
   const [org, setOrg] = useState("TestOrg");
   const [currType, setCurrType] = useState(null);
-  const CurrIntegration = integrationMapping[currType];
 
   return (
     <Box
@@ -39,29 +32,35 @@ export const IntegrationForm = () => {
         />
         <Autocomplete
           id="integration-type"
-          options={Object.keys(integrationMapping)}
+          options={["Notion", "Airtable", "HubSpot"]}
           sx={{ width: 300, mt: 2 }}
           renderInput={(params) => (
             <TextField {...params} label="Integration Type" />
           )}
-          onChange={(e, value) => setCurrType(value)}
+          onChange={(e, value) => {
+            setCurrType(value);
+            setIntegrationParams({}); // reset when switching
+          }}
         />
       </Box>
+
       {currType && (
         <Box>
-          <CurrIntegration
+          <OAuthIntegration
             user={user}
             org={org}
+            integrationType={currType}
             integrationParams={integrationParams}
             setIntegrationParams={setIntegrationParams}
           />
         </Box>
       )}
+
       {integrationParams?.credentials && (
         <Box sx={{ mt: 2 }}>
           <DataForm
-            integrationType={integrationParams?.type}
-            credentials={integrationParams?.credentials}
+            integrationType={integrationParams.type}
+            credentials={integrationParams.credentials}
           />
         </Box>
       )}
