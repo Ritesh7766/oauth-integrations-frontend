@@ -24,13 +24,13 @@ export const OAuthIntegration = ({
 
       const { data: authURL } = await axios.post(
         `http://localhost:8000/integrations/${integrationName}/authorize`,
-        formData
+        formData,
       );
 
       const popup = window.open(
         authURL,
         `${integrationType} Authorization`,
-        "width=600,height=600"
+        "width=600,height=600",
       );
 
       const pollTimer = setInterval(async () => {
@@ -53,11 +53,11 @@ export const OAuthIntegration = ({
 
       const { data: credentials } = await axios.post(
         `http://localhost:8000/integrations/${integrationName}/credentials`,
-        formData
+        formData,
       );
 
       if (credentials) {
-        setIntegrationParams(prev => ({
+        setIntegrationParams((prev) => ({
           ...prev,
           credentials,
           type: integrationType,
